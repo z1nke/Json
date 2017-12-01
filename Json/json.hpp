@@ -371,14 +371,14 @@ private:
             {
                 ret += static_cast<char>(0xE0 | ((u >> 12) & 0x0F));
                 ret += static_cast<char>(0x80 | ((u >> 6)  & 0x3F));
-                ret += static_cast<char>(0x80 | (u         & 0x3F));
+                ret += static_cast<char>(0x80 | ( u        & 0x3F));
             }
             else
             {
                 ret += static_cast<char>(0xF0 | ((u >> 18) & 0x07));
                 ret += static_cast<char>(0x80 | ((u >> 12) & 0x3F));
                 ret += static_cast<char>(0x80 | ((u >> 6)  & 0x3F));
-                ret += static_cast<char>(0x80 | (u         & 0x3F));
+                ret += static_cast<char>(0x80 | ( u        & 0x3F));
             }
         }
 
