@@ -1,12 +1,10 @@
 # A simple json library with c++
 
-## c++ 版本问题：
-
 源代码在 `json\json.hpp`。
 
 更多测试见 `json\test.cpp` 。
 
-
+## c++ 版本问题：
 
 使用了 `std::variant(c++17)`，所以编译需要支持 c++17 的编译器。
 
