@@ -44,9 +44,9 @@ using namespace Json;
 
 ```c++
 #include "json.hpp"
-using namespace Json;	// 我在这里偷一些懒
+using namespace Json;   // 我在这里偷一些懒
 
-json j0; 				// null
+json j0;                // null
 json j1 = nullptr;
 json j2 = true;
 json j3 = false;
@@ -64,10 +64,10 @@ json j7 = json::object_t{ "name" : "czn", "age" : 21 };
 #include "json.hpp"
 using namespace Json;
 
-json j1 = json::parse("null");		// #1
-json j2 = "null"_json;				// #2
+json j1 = json::parse("null");      // #1
+json j2 = "null"_json;              // #2
 json j3;
-std::cin >> j3;						// #3, 这里输入内容不能有空白字符
+std::cin >> j3;                     // #3, 这里输入内容不能有空白字符
 
 json j4 = "[null, true, 42, \"abc\", []]"_json;
 
@@ -132,16 +132,16 @@ j6["age"] = 20;
 ### 其他接口
 
 ```c++
-size();				// return error: 0; null, boolean, number, string: 1; array, object: n;
-get_type();			// return enum class json_type
-type_name();		// return const char* type name
-is_null();			// return bool
+size();             // return error: 0; null, boolean, number, string: 1; array, object: n;
+get_type();         // return enum class json_type
+type_name();        // return const char* type name
+is_null();          // return bool
 is_boolean();
 is_number();
 is_string();
 is_array();
 is_object();
-is_error();			// parse fail
+is_error();         // parse fail
 
 lhs.swap(rhs);
 Json::swap(lhs, rhs);
