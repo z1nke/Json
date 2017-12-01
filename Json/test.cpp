@@ -238,6 +238,9 @@ void test_object()
     UNIT_TEST(true, j1["o"].is_object());
     UNIT_TEST(1.0, j1["o"]["1"].get_value<json::number_t>());
     UNIT_TEST(3, j1["o"].size());
+
+    j1["f"] = true;
+    UNIT_TEST(true, j1["f"].get_value<json::boolean_t>());
 }
 
 void test_error()
