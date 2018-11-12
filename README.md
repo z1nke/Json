@@ -1,16 +1,12 @@
 # A simple json library with c++
 
-源代码在 `json\json.hpp`。
+源代码在 `json/json.hpp`。
 
-更多测试见 `json\test.cpp` 。
+更多测试见 `json/test.cpp` 。
 
-## c++ 版本问题：
+## c++ 版本及依赖问题：
 
-使用了 `std::variant(c++17)`，所以编译需要支持 c++17 的编译器。
-
-如果需要可以换成 `boost::variant`。需要改动以下接口。
-
-`std::get => boost::get`， `std::variant::index() => boost::variant::which()` 。
+需要 `std::variant(c++17)` 或者 `boost::variant`。 
 
 
 

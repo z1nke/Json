@@ -5,11 +5,38 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <variant>
 #include <vector>
+
+#if __cplusplus >= 201103L || _MSVC_LANG >= 201103L
+#  define JSON_HAS_CXX11 1
+#endif 
+
+#if __cplusplus >= 201402L || _MSVC_LANG >= 201402L
+#  define JSON_HAS_CXX14 1
+#endif 
+
+#if __cplusplus >= 201703L || _MSVC_LANG >= 201703L
+#  define JSON_HAS_CXX17 1
+#endif 
+
+#ifdef JSON_HAS_CXX17
+#include <variant>
+#else
+#include <boost/variant.hpp>
+#endif 
 
 namespace Json
 {
+
+namespace detail
+{
+#ifdef JSON_HAS_CXX17
+    using std::get;
+#else
+    using boost::get;
+#endif;
+}
+
 
 enum class json_type : size_t
 {
@@ -41,8 +68,13 @@ public:
     using error_t   = error_type;
 
 private:
+#ifdef JSON_HAS_CXX17
     using json_value = std::variant<null_t, boolean_t, number_t,
         string_t, array_t, object_t, error_t>;
+#else 
+    using json_value = boost::variant<null_t, boolean_t, number_t,
+        string_t, array_t, object_t, error_t>;
+#endif
     
     json_value m_value;
 public:
@@ -62,7 +94,11 @@ public:
 
     json_type get_type() const noexcept
     {
+#ifdef JSON_HAS_CXX17
         return static_cast<json_type>(m_value.index());
+#else
+        return static_cast<json_type>(m_value.which());
+#endif
     }
 
     const char* type_name() const noexcept
@@ -90,13 +126,13 @@ public:
     template <typename T>
     T& get_value()
     {
-        return std::get<T>(m_value);
+        return detail::get<T>(m_value);
     }
 
     template <typename T>
     const T& get_value() const
     {
-        return std::get<T>(m_value);
+        return detail::get<T>(m_value);
     }
 
     size_t size() const
@@ -110,9 +146,9 @@ public:
         case Json::json_type::string:
             return 1;
         case Json::json_type::array:
-            return std::get<array_t>(m_value).size();
+            return detail::get<array_t>(m_value).size();
         case Json::json_type::object:
-            return std::get<object_t>(m_value).size();
+            return detail::get<object_t>(m_value).size();
         default:
             return 0;
         }
@@ -121,25 +157,25 @@ public:
     json& operator[](size_t idx)
     {
         assert(is_array());
-        return std::get<array_t>(m_value)[idx];
+        return detail::get<array_t>(m_value)[idx];
     }
 
     const json& operator[](size_t idx) const
     {
         assert(is_array());
-        return std::get<array_t>(m_value)[idx];
+        return detail::get<array_t>(m_value)[idx];
     }
 
     json& operator[](const std::string& key)
     {
         assert(is_object());
-        return std::get<object_t>(m_value)[key];
+        return detail::get<object_t>(m_value)[key];
     }
 
     const json& operator[](const std::string& key) const
     {
         assert(is_object());
-        return const_cast<object_t&>(std::get<object_t>(m_value))[key];
+        return const_cast<object_t&>(detail::get<object_t>(m_value))[key];
     }
 
     bool is_null()    const noexcept { return get_type() == json_type::null;    }
@@ -572,22 +608,22 @@ public:
         switch (type)
         {
         case Json::json_type::null:
-            dump(std::get<null_t>(m_value), out);
+            dump(detail::get<null_t>(m_value), out);
             break;
         case Json::json_type::boolean:
-            dump(std::get<boolean_t>(m_value), out);
+            dump(detail::get<boolean_t>(m_value), out);
             break;
         case Json::json_type::number:
-            dump(std::get<number_t>(m_value), out);
+            dump(detail::get<number_t>(m_value), out);
             break;
         case Json::json_type::string:
-            dump(std::get<string_t>(m_value), out);
+            dump(detail::get<string_t>(m_value), out);
             break;
         case Json::json_type::array:
-            dump(std::get<array_t>(m_value), out);
+            dump(detail::get<array_t>(m_value), out);
             break;
         case Json::json_type::object:
-            dump(std::get<object_t>(m_value), out);
+            dump(detail::get<object_t>(m_value), out);
             break;
         default:
             out = "parse error";
@@ -633,9 +669,11 @@ inline void swap(json& lhs, json& rhs) noexcept
     lhs.swap(rhs);
 }
 
+#ifdef JSON_HAS_CXX11
 json operator ""_json(const char* str, size_t n)
 {
     return json::parse(std::string(str, n));
 }
+#endif 
 
 }   // namespace Json
