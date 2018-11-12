@@ -238,7 +238,7 @@ private:
                 if (ch < 0x20)
                 {
                     char buff[7];
-                    sprintf_s(buff, "\\u%04X", ch);
+                    std::snprintf(buff, sizeof(buff), "\\u%04X", ch);
                     out += buff;
                 }
                 else
