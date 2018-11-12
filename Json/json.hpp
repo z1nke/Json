@@ -34,7 +34,7 @@ namespace detail
     using std::get;
 #else
     using boost::get;
-#endif;
+#endif
 }
 
 
@@ -49,12 +49,8 @@ enum class json_type : size_t
     error
 };
 
-namespace
-{
 struct error_type { };
 constexpr error_type error_value;
-}   // unamed namespace 
-
 
 class json
 {
