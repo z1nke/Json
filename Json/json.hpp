@@ -50,12 +50,12 @@ enum class json_type : size_t
 };
 
 struct error_type { };
-constexpr error_type error_value;
+constexpr error_type error_value{};
 
 class json
 {
 public:
-    using null_t    = nullptr_t;
+    using null_t    = std::nullptr_t;
     using boolean_t = bool;
     using number_t  = double;
     using string_t  = std::string;
